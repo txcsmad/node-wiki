@@ -44,3 +44,7 @@ That's it! Vist `http://localhost:8080` in your browser.
 - [ ] Use a database instead of the raw filesytem to store page data
 - [ ] Improve security
 - [ ] Add last edited timestamps for pages
+
+## License
+
+[MIT](https://github.com/utcsmad/node-wiki/blob/complete/LICENSE)
