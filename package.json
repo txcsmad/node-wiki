@@ -11,6 +11,7 @@
   "private": true,
   "dependencies": {
     "bluebird": "^3.2.1",
+    "body-parser": "^1.14.2",
     "connect": "^3.4.1",
     "finalhandler": "^0.4.1",
     "glob": "^6.0.4",

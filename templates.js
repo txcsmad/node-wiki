@@ -1,7 +1,8 @@
-var Handlebars = require('Handlebars');
-var layouts = require('handlebars-layouts');
 var fs = require('fs');
 var path = require('path');
+
+var Handlebars = require('Handlebars');
+var layouts = require('handlebars-layouts');
 
 var templates = new Map();
 

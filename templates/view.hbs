@@ -6,10 +6,10 @@
     <article>
         <h1>{{page.title}}</h1>
         <div>
-            <p><button>Edit</button></p>
+            <p><a href="../edit/{{page.title}}" class="button button-primary">Edit</a></p>
         </div>
         <div class="content">
-            {{{page.html}}}
+            {{{page.content}}}
         </div>
     </article>
 {{/content}}

@@ -1,24 +1,29 @@
 var http = require('http');
 var url = require('url');
+var path = require('path');
+var fs = require('fs');
+
 var Router = require('router');
 var finalhandler = require('finalhandler');
 var connect = require('connect');
-var path = require('path');
-var fs = require('fs');
 var Promise = require('bluebird');
 var glob = Promise.promisify(require('glob'));
+var bodyParser = require('body-parser');
 
 var Page = require('./page');
 var templates = require('./templates');
+var errorResponse = require('./utilities.js').errorResponse;
+var redirect = require('./utilities.js').redirect;
+var extractPageTitle = require('./utilities.js').extractPageTitle;
 
 // Route handlers
 var handleIndex = (req, res) => {
     glob(path.join(__dirname, 'data', 'pages', `*${Page.extension}`)).then((files) => {
         var pages = files.map(f => {
-            var name = path.basename(f, Page.extension);
+            var title = path.basename(f, Page.extension);
             return { 
-                title: name,
-                url: `view/${name}`
+                title: title,
+                url: `view/${title}`
             };
         });
 
@@ -33,48 +38,70 @@ var handleIndex = (req, res) => {
         res.write(html);
         res.end();
     }).catch((err) => {
-        responseError(res, 400, 'specify an article');
+        errorResponse(res, 400, 'specify an article');
     });
 };
 
-var responseError = (res, statusCode, reason) => {
-    res.statusCode = statusCode;
-    res.end('error: ' + reason);
-    return;
+var handleSave = (req, res) => {
+    var title = extractPageTitle(req.url);
+    if (title == null) {
+        errorResponse(res, 400, 'missing page name to save');
+    }
+
+    var page = new Page(title, new Buffer(req.body.content.trim()));
+    page.save().then(() => {
+        redirect(req, res, `/view/${title}`);
+    }, (err) => {
+        errorResponse(res, 500, err.message);
+    });
 };
 
-var handleSave = () => {
-
-};
-
-var handleEdit = () => {
-
-};
-
-var handleNew = () => {
-
-};
-
-var handleView = (req, res) => {
-    var parsed = url.parse(req.url);
-    var components = parsed.path.split('/').filter((c) => c.length > 0);
-    
-    if (!(components.length > 1)) {
-        responseError(res, 500, 'specify an article');
+var handleEdit = (req, res) => {
+    var title = extractPageTitle(req.url);
+    if (title == null) {
+        errorResponse(res, 500, 'specify an article');
         return;
     }
 
-    var name = decodeURI(components[1]);
+    Page.load(title).then((page) => {
+        var markdown = page.body.toString().trim();
+
+        var template = templates.get('edit');
+        var html = template({
+            title: title,
+            page: {
+                title: title,
+                content: markdown
+            }
+        });
+
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/html');
+        res.write(html);
+        res.end();
+    });
+};
+
+var handleNew = () => {
+};
+
+var handleView = (req, res) => {
+    var title = extractPageTitle(req.url);
     
-    Page.load(name).then((page) => {
+    if (title == null) {
+        errorResponse(res, 500, 'specify an article');
+        return;
+    }
+    
+    Page.load(title).then((page) => {
         var content = page.html();
 
         var template = templates.get('view');
         var html = template({
-            title: name,
+            title: title,
             page: {
-                title: name,
-                html: content
+                title: title,
+                content: content
             }
         });
 
@@ -83,23 +110,42 @@ var handleView = (req, res) => {
         res.write(html);
         res.end();
     }, function() {
-        responseError(res, 500, 'specify an article');
+        errorResponse(res, 500, 'specify an article');
         return;
     });
+};
+
+var handleDelete = (req, res) => {
+    var title = extractPageTitle(req.url);
+    if (title == null) {
+        errorResponse(res, 500, 'specify an article');
+        return;
+    }
+
+    Page.delete(title).then(() => {
+        redirect(req, res, '/');
+    }, () => {
+        errorResponse(res, 500, 'page not deleted');
+    })
 };
 
 // Register routes
 var router = new Router();
 router.get('/', handleIndex);
 router.get('/view/*', handleView);
+router.get('/edit/*', handleEdit);
+router.post('/save/*', handleSave);
+router.post('/delete/*', handleDelete);
 
 // Create server
-var server = connect();
+var server = connect(); // using connect allows adding middleware functions
+server.use(bodyParser()); // add body parser middleware
 
-server.use((req, res) => {
+server.use((req, res) => { // main route handling
     router(req, res, finalhandler(req, res));
 });
 
+// Listen on a port and print a useful message
 var port = process.env.port || 8080;
 var server = http.createServer(server).listen(port);
 console.log('-> Listening for incoming connection on: ' + port + "...");

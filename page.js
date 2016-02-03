@@ -1,8 +1,10 @@
-var fs = require('fs');
 var path = require('path');
+var fs = require('fs');
+
 var Promise = require('bluebird');
 var writeFile = Promise.promisify(fs.writeFile);
 var readFile = Promise.promisify(fs.readFile);
+var unlink = Promise.promisify(fs.unlink);
 var marked = require('marked');
 
 var extension = ".md";
@@ -19,7 +21,7 @@ Page.prototype.html = function() {
 };
 
 Page.prototype.save = function() {
-    return writeFile(location(title), this.body, {
+    return writeFile(location(this.title), this.body, {
         mode: 0o600
     });
 };
@@ -32,6 +34,10 @@ Page.load = (title) => {
             return reject(err);
         });
     });
+};
+
+Page.delete = (title) => {
+    return unlink(location(title));
 };
 
 Page.extension = extension;

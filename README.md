@@ -36,4 +36,4 @@ That's it! Vist `http://localhost:8080` in your browser.
 
 - Use a database instead of the raw filesytem to store page data
 - Improve security
-- Make the website responsive, so it looks great at all screen sizes
+- Add last edited timestamps
