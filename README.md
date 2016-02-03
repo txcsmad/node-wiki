@@ -6,7 +6,9 @@ Simple editable Markdown wiki built with node using `fs`
 
 ## Usage
 
-
+- Click on a link to view the page
+- Hit the `Edit` button to update or delete pages
+- Create new pages by visiting `/view/YOUR NEW PAGE TITLE`
 
 ## Setup
 
@@ -29,7 +31,7 @@ Start the local server
 $ gulp start
 ```
 
-That's it! Vist `http://localhost:8080` in your browser.
+That's it! Visit `http://localhost:8080` in your browser. The gulp task will automatically restart your app when you edit files.
 
 ## Tech
 
