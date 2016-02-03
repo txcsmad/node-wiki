@@ -2,6 +2,12 @@
 
 Simple editable Markdown wiki built with node using `fs`
 
+![](http://i.imgur.com/vQXtP6O.png)
+
+## Usage
+
+
+
 ## Setup
 
 Clone this repo and `cd` into the cloned directory
@@ -34,6 +40,7 @@ That's it! Vist `http://localhost:8080` in your browser.
 
 ## Improvements
 
-- Use a database instead of the raw filesytem to store page data
-- Improve security
-- Add last edited timestamps
+- [ ] Add alternate ways to create new pages
+- [ ] Use a database instead of the raw filesytem to store page data
+- [ ] Improve security
+- [ ] Add last edited timestamps for pages

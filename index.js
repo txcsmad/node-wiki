@@ -15,6 +15,7 @@ var templates = require('./templates');
 var errorResponse = require('./utilities.js').errorResponse;
 var redirect = require('./utilities.js').redirect;
 var extractPageTitle = require('./utilities.js').extractPageTitle;
+var htmlResponse = require('./utilities.js').htmlResponse;
 
 // Route handlers
 var handleIndex = (req, res) => {
@@ -33,56 +34,31 @@ var handleIndex = (req, res) => {
             pages: pages
         });
 
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html');
-        res.write(html);
-        res.end();
+        htmlResponse(res, html);
     }).catch((err) => {
         errorResponse(res, 400, 'specify an article');
     });
 };
 
-var handleSave = (req, res) => {
+var handleNew = (req, res) => {
     var title = extractPageTitle(req.url);
+    
     if (title == null) {
-        errorResponse(res, 400, 'missing page name to save');
-    }
-
-    var page = new Page(title, new Buffer(req.body.content.trim()));
-    page.save().then(() => {
-        redirect(req, res, `/view/${title}`);
-    }, (err) => {
-        errorResponse(res, 500, err.message);
-    });
-};
-
-var handleEdit = (req, res) => {
-    var title = extractPageTitle(req.url);
-    if (title == null) {
-        errorResponse(res, 500, 'specify an article');
+        errorResponse(res, 500, 'specify a title');
         return;
     }
 
-    Page.load(title).then((page) => {
-        var markdown = page.body.toString().trim();
-
-        var template = templates.get('edit');
-        var html = template({
+    var template = templates.get('edit');
+    var html = template({
+        title: title,
+        page: {
             title: title,
-            page: {
-                title: title,
-                content: markdown
-            }
-        });
-
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html');
-        res.write(html);
-        res.end();
+            content: '',
+            newPage: true
+        }
     });
-};
 
-var handleNew = () => {
+    htmlResponse(res, html);
 };
 
 var handleView = (req, res) => {
@@ -105,13 +81,47 @@ var handleView = (req, res) => {
             }
         });
 
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html');
-        res.write(html);
-        res.end();
+        htmlResponse(res, html);
     }, function() {
+        console.log('msg')
+        handleNew(req, res);
+    });
+};
+
+var handleEdit = (req, res) => {
+    var title = extractPageTitle(req.url);
+    if (title == null) {
         errorResponse(res, 500, 'specify an article');
         return;
+    }
+
+    Page.load(title).then((page) => {
+        var markdown = page.body.toString().trim();
+
+        var template = templates.get('edit');
+        var html = template({
+            title: title,
+            page: {
+                title: title,
+                content: markdown
+            }
+        });
+
+        htmlResponse(res, html);
+    });
+};
+
+var handleSave = (req, res) => {
+    var title = extractPageTitle(req.url);
+    if (title == null) {
+        errorResponse(res, 400, 'missing page name to save');
+    }
+
+    var page = new Page(title, new Buffer(req.body.content.trim()));
+    page.save().then(() => {
+        redirect(req, res, `/view/${title}`);
+    }, (err) => {
+        errorResponse(res, 500, err.message);
     });
 };
 
@@ -139,7 +149,9 @@ router.post('/delete/*', handleDelete);
 
 // Create server
 var server = connect(); // using connect allows adding middleware functions
-server.use(bodyParser()); // add body parser middleware
+server.use(bodyParser.urlencoded({ // add body parser middleware
+  extended: true
+}));
 
 server.use((req, res) => { // main route handling
     router(req, res, finalhandler(req, res));

@@ -24,3 +24,10 @@ exports.redirect = (req, res, path) => {
     );
     res.end();
 };
+
+exports.htmlResponse = (res, html) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/html');
+    res.write(html);
+    res.end();
+};
