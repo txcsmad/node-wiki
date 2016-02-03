@@ -1,8 +1,8 @@
 {{#extend "layout"}}
 {{#content "body"}}
     <h1>Welcome to the wiki</h1>
-    <p>Click on a link to view a page and edit it.</p>
-    <ul>
+    <p>Click on a page to view or edit.</p>
+    <ul class="index">
         {{#each pages}}
             <li><a href="{{this.url}}">{{this.title}}</a></li>
         {{/each}}

@@ -1,14 +1,14 @@
 # node-wiki
 
-Simple editable wiki built with node using `fs`
+Simple editable Markdown wiki built with node using `fs`
 
 ## Setup
 
-Clone this repo and `cd` into it
+Clone this repo and `cd` into the cloned directory
 
 ```
 $ git clone <repo-url>
-$ cd <repo-directory>
+$ cd <directory>
 ```
 
 Install dependencies
@@ -29,6 +29,7 @@ That's it! Vist `http://localhost:8080` in your browser.
 
 - Node.js
 - Handlebars
+- Markdown
 - BassCSS
 
 ## Improvements

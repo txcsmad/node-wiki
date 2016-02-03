@@ -1,0 +1,16 @@
+{{#extend "layout"}}
+{{#content "body"}}
+    <div>
+        <p><a href="../">Back to list</a></p>
+    </div>
+    <article>
+        <h1>{{page.title}}</h1>
+        <div>
+            <p><button>Edit</button></p>
+        </div>
+        <div class="content">
+            {{{page.html}}}
+        </div>
+    </article>
+{{/content}}
+{{/extend}}
