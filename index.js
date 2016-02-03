@@ -5,12 +5,12 @@ var url = require('url');
 var path = require('path');
 var fs = require('fs');
 
-var Router = require('router');
-var finalhandler = require('finalhandler');
-var connect = require('connect');
-var Promise = require('bluebird');
-var glob = Promise.promisify(require('glob'));
-var bodyParser = require('body-parser');
+var Router = require('router'); // register and handle routes 
+var finalhandler = require('finalhandler'); // for catching if no routes matched
+var connect = require('connect'); // the core of the app
+var Promise = require('bluebird'); // Promises library, primarily used for transforming node.js callbacks to Promise style
+var glob = Promise.promisify(require('glob')); // find files using glob patterns: for example: *.js
+var bodyParser = require('body-parser'); // connect middleware for getting req POST body easily
 
 var Page = require('./page');
 var templates = require('./templates');
