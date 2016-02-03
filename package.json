@@ -1,0 +1,26 @@
+{
+  "name": "node-wiki",
+  "version": "0.1.0",
+  "description": "Simple editable wiki using fs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nishanth Shanmugham <nishanth.gerrard@gmail.com> (http://nishanths.github.io)",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bluebird": "^3.2.1",
+    "connect": "^3.4.1",
+    "finalhandler": "^0.4.1",
+    "handlebars": "^4.0.5",
+    "handlebars-layouts": "^3.1.3",
+    "marky-markdown": "^6.0.3",
+    "router": "^1.1.4",
+    "serve-static": "^1.10.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-nodemon": "^2.0.6"
+  }
+}

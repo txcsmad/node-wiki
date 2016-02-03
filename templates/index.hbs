@@ -1,0 +1,11 @@
+{{#extend "layout"}}
+{{#content "body"}}
+    <h1>Welcome to the wiki</h1>
+    <p>Click on a link to view a page and edit it.</p>
+    <ul>
+        {{#each pages}}
+            <li><a href="{{this.url}}">{{this.title}}</a></li>
+        {{/each}}
+    </ul>
+{{/content}}
+{{/extend}}
