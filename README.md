@@ -6,14 +6,13 @@ Simple editable Markdown wiki built with node using `fs`
 
 - [`complete`](https://github.com/utcsmad/node-wiki/tree/complete): contains completed code
 - `master`: non-existent currently
-- [`workshop`](https://github.com/utcsmad/node-wiki/tree/workshop): code to use to follow along in the workshop ([zip]())
+- [`workshop`](https://github.com/utcsmad/node-wiki/tree/workshop): code to use to follow along in the workshop ([zip](https://github.com/utcsmad/node-wiki/archive/workshop.zip))
 
 ## Usage
 
 - Click on a link to view the page
 - Hit the `Edit` button to update or delete pages
 - Create new pages by visiting `/view/YOUR NEW PAGE TITLE`
-
 
 ![](http://i.imgur.com/vQXtP6O.png)
 
