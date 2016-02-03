@@ -13,8 +13,8 @@ Simple editable Markdown wiki built with node using `fs`
 Clone this repo and `cd` into the cloned directory
 
 ```
-$ git clone <repo-url>
-$ cd <directory>
+$ git clone git@github.com:utcsmad/node-wiki.git
+$ cd node-wiki
 ```
 
 Install dependencies
